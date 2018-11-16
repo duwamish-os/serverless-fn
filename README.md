@@ -103,7 +103,16 @@ aws lambda invoke --invocation-type RequestResponse --function-name inventory-ev
     "ExecutedVersion": "$LATEST", 
     "StatusCode": 200
 }
+
+
+$ cat output.text 
+{"item":"shirts","totalQty":110}
 ```
+
+Metrics
+--------
+
+![](metrics.png)
 
 References
 -----------
