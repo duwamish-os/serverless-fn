@@ -114,6 +114,19 @@ Metrics
 
 ![](metrics.png)
 
+
+use proxy for fn
+---
+
+https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-as-simple-proxy-for-lambda.html
+
+
+```
+aws apigateway get-rest-apis --profile aws-default --region us-west-2
+
+curl -v -X POST 'https://r275xc9bmd.execute-api.us-west-2.amazonaws.com/inventory' -H 'content-type: application/json' -H 'day: Thursday' -H 'x-amz-docs-region: us-west-2' -d '{"item": "shirts", "qty": 11}'
+```
+
 References
 -----------
 
