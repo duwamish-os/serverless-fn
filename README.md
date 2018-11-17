@@ -46,7 +46,7 @@ create a [Identity Access Role](https://console.aws.amazon.com/iam/home#/roles) 
 ```
 $ aws lambda delete-function --function-name inventory-event-processor --region us-west-2 --profile aws-default
 
-$ aws lambda create-function --function-name inventory-event-processor --role arn:aws:iam::xxx:role/root --runtime java8 --handler event.handlers.InventoryEventHandler::handleRequest --zip-file fileb://target/scala-2.12/amz-serverless-InventoryResp-assembly-1.0.jar --memory-size 512 --region us-west-2 --profile aws-default
+$ aws lambda create-function --function-name inventory-event-processor --role arn:aws:iam::xxx:role/root --runtime java8 --handler event.handlers.InventoryEventHandler::handleRequest --zip-file fileb://target/scala-2.12/inventory-api-assembly-1.0.jar --memory-size 256 --region us-west-2 --profile aws-default
 {
     "TracingConfig": {
         "Mode": "PassThrough"
@@ -124,8 +124,31 @@ https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-
 ```
 aws apigateway get-rest-apis --profile aws-default --region us-west-2
 
-curl -v -X POST 'https://r275xc9bmd.execute-api.us-west-2.amazonaws.com/inventory' -H 'content-type: application/json' -H 'day: Thursday' -H 'x-amz-docs-region: us-west-2' -d '{"item": "shirts", "qty": 11}'
+curl -v -X POST 'https://50kv7jwl6l.execute-api.us-west-2.amazonaws.com/' -H 'content-type: application/json' -H 'day: Thursday' -H 'x-amz-docs-region: us-west-2' -d '{"item": "shirts", "qty": 11}'
 ```
+
+
+create a api request, deploy it
+
+InventoryRequest
+
+```
+{
+  "type" : "object",
+  "properties" : {
+    "item" : {
+      "type" : "string"
+    },
+    "qty" : {
+      "type" : "number"
+    }
+  }
+}
+```
+
+API references:
+
+https://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html
 
 References
 -----------

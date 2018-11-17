@@ -1,4 +1,4 @@
-name := "amz-serverless-InventoryResp"
+name := "inventory-api"
 
 version := "1.0"
 
