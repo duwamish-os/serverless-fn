@@ -9,21 +9,33 @@ import doobie._
 import doobie.implicits._
 import cats._
 import cats.implicits._
+import com.amazonaws.services.lambda.runtime.LambdaRuntime
 
 object Database {
 
+  private val logger = LambdaRuntime.getLogger
+
   case class Inventory(sku: String, qty: Int)
 
-  implicit val cs = IO.contextShift(ExecutionContext.Implicits.global)
+  implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.Implicits.global)
+
+  val driver = "com.mysql.cj.jdbc.Driver"
+  val connectionUrl = "jdbc:mysql://duwamish.<<12>>.us-west-2.rds.amazonaws.com:3306/inventorydb?connectTimeout=1000"
+  val user = "root"
+  val password = "donnyjepp"
+
+  logger.log(s"getting connection to $user")
 
   val connection: Aux[IO, Unit] = Transactor.fromDriverManager[IO](
-    driver = "com.mysql.cj.jdbc.Driver",
-    url = "jdbc:mysql://duwamish.<<12>>.us-west-2.rds.amazonaws.com:3306/inventorydb",
-    user = "root",
-    pass = "deep"
+    driver = driver,
+    url = connectionUrl,
+    user = user,
+    pass = password
   )
 
   def inventoryByItem(sku: String): Option[Inventory] = {
+    logger.log(s"finding inventory for $sku")
+
     sql"""select sku, qty from Inventory where sku=$sku"""
       .query[Inventory]
       .option
