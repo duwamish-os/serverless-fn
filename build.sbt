@@ -9,7 +9,10 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.0"
+  "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
+  "org.tpolecat" %% "doobie-core"      % "0.6.0",
+  "mysql" % "mysql-connector-java" % "8.0.13"
+
 )
 
 resolvers ++= Seq(

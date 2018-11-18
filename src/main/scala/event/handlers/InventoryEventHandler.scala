@@ -3,17 +3,20 @@ package event.handlers
 import java.util.UUID
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
+import event.db.Database
 
 class InventoryEventHandler extends RequestHandler[InventoryReq, InventoryResp] {
 
   import InventoryEventHandler._
 
-  override def handleRequest(input: InventoryReq, context: Context): InventoryResp = {
+  override def handleRequest(req: InventoryReq, context: Context): InventoryResp = {
+
+    val inventory = Database.inventoryByItem(req.getItem)
 
     new InventoryResp(
       apiId,
-      input.getItem,
-      input.getQty + 10
+      req.getItem,
+      inventory.map(_.qty).getOrElse(0)
     )
   }
 
@@ -24,7 +27,13 @@ object InventoryEventHandler {
   private val apiId = UUID.randomUUID()
 
   def main(args: Array[String]): Unit = {
-    val resp = handler.handleRequest(new InventoryReq(UUID.randomUUID(), "item1", 100), null)
+
+    val req = new InventoryReq(
+      UUID.randomUUID(),
+      "sku-1",
+      100)
+
+    val resp = handler.handleRequest(req, null)
     println(resp.getItem)
     println(resp.getTotalQty)
   }
