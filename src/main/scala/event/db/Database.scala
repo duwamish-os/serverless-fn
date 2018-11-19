@@ -19,14 +19,14 @@ object Database {
 
   implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.Implicits.global)
 
-  val driver = "com.mysql.cj.jdbc.Driver"
-  val connectionUrl = "jdbc:mysql://duwamish.<<12>>.us-west-2.rds.amazonaws.com:3306/inventorydb?connectTimeout=1000"
-  val user = "root"
-  val password = "donnyjepp"
+  private val driver = "com.mysql.cj.jdbc.Driver"
+  private val connectionUrl = "jdbc:mysql://duwamish.<<12>>.us-west-2.rds.amazonaws.com:3306/inventorydb?connectTimeout=1500"
+  private val user = "root"
+  private val password = "donnyjepp"
 
-  logger.log(s"getting connection to $user")
+  logger.log(s"getting connection to $connectionUrl")
 
-  val connection: Aux[IO, Unit] = Transactor.fromDriverManager[IO](
+  lazy val connection: Aux[IO, Unit] = Transactor.fromDriverManager[IO](
     driver = driver,
     url = connectionUrl,
     user = user,

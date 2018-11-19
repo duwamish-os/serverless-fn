@@ -6,14 +6,16 @@ public class InventoryReq {
     private UUID reqId;
     private String item;
     private int qty;
+    private boolean useDb;
 
     public InventoryReq() {
     }
 
-    public InventoryReq(UUID reqId, String item, int qty) {
+    public InventoryReq(UUID reqId, String item, int qty, boolean useDb) {
         this.reqId = reqId;
         this.item = item;
         this.qty = qty;
+        this.useDb = useDb;
     }
 
     public UUID getReqId() {
@@ -38,5 +40,13 @@ public class InventoryReq {
 
     public void setQty(int qty) {
         this.qty = qty;
+    }
+
+    public boolean isUseDb() {
+        return useDb;
+    }
+
+    public void setUseDb(boolean useDb) {
+        this.useDb = useDb;
     }
 }

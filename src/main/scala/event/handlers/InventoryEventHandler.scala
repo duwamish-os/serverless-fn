@@ -8,17 +8,27 @@ import event.db.Database
 class InventoryEventHandler extends RequestHandler[InventoryReq, InventoryResp] {
 
   import InventoryEventHandler._
+  import scala.concurrent.ExecutionContext.Implicits.global
 
   override def handleRequest(req: InventoryReq, context: Context): InventoryResp = {
 
     context.getLogger.log(s"request: ${req.getItem}")
 
-    val inventory = Database.inventoryByItem(req.getItem)
+    val inventory =
+      if (req.isUseDb) {
+        Database
+          .inventoryByItem(req.getItem)
+          .map(_.qty)
+          .getOrElse(0)
+
+      } else {
+        req.getQty
+      }
 
     new InventoryResp(
       apiId,
       req.getItem,
-      inventory.map(_.qty).getOrElse(0)
+      inventory
     )
   }
 
@@ -33,7 +43,9 @@ object InventoryEventHandler {
     val req = new InventoryReq(
       UUID.randomUUID(),
       "sku-1",
-      100)
+      100,
+      true
+    )
 
     val resp = handler.handleRequest(req, new Context {
       override def getAwsRequestId: String = ???
